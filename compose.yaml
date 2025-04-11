@@ -1,0 +1,47 @@
+services:  
+
+  script_runner:            
+    build: ./script_runner
+    environment:  
+      SERVER_A_ADDRESS: 10.0.0.2
+      SERVER_B_ADDRESS: 10.0.0.3
+      SERVER_A_KEY: /run/secrets/server_a_key
+      SERVER_B_KEY: /run/secrets/server_b_key
+    secrets:  
+        - server_a_key
+        - server_b_key
+    volumes:
+      - ./script_runner/rem-device-stat-check:/rem-device-stat-check/
+    networks:
+      custom-network:
+          ipv4_address: 10.0.0.1
+    command: tail -F anything
+
+  server_a:  
+    build: ./server_a
+    networks:
+      custom-network:
+          ipv4_address: 10.0.0.2
+
+  server_b:  
+    build: ./server_b  
+    networks:
+      custom-network:
+          ipv4_address: 10.0.0.3
+    volumes:
+      - ./server_b/network_devices.csv:/home/stauto/network_devices.csv/
+
+
+secrets:
+  server_a_key:
+    file: server_a_key
+  server_b_key:
+    file: server_b_key
+
+networks:
+  custom-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.0.0.0/24"
+          gateway: "10.0.0.254"
