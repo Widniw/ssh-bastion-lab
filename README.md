@@ -1,4 +1,4 @@
-# hitachi-interview
+# hitachi-interview 🙂
 
 ## Scenario & Program Description
 
