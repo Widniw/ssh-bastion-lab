@@ -1,4 +1,3 @@
-# hitachi-interview 🙂
 
 ## Scenario & Program Description
 
